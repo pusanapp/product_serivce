@@ -19,7 +19,15 @@ const addProduct = async (req, res) => {
 }
 
 const getAllProduct = async (req, res) => {
-    await Product.findAll({}).then(data=>{
+    await Product.findAll({
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock','company']
+            }
+        ]
+    }).then(data=>{
         res.send({
             status: true,
             message: 'Load All Product',
