@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     category: DataTypes.STRING,
     price: DataTypes.INTEGER,
+    grosir_price: DataTypes.INTEGER,
+    grosir: DataTypes.INTEGER,
     discount_price: DataTypes.INTEGER,
     discount: DataTypes.FLOAT,
     weight: DataTypes.FLOAT,
@@ -34,6 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.INTEGER,
     is_new: DataTypes.INTEGER,
     is_favorite: DataTypes.INTEGER,
+    sold: DataTypes.INTEGER,
+    seen: DataTypes.INTEGER
 
   }, {
     sequelize,
