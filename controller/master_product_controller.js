@@ -68,6 +68,60 @@ const updateProduct = async (req,res) => {
     });
 }
 
+const getProductsByBrand= async (req,res) => {
+    const brand = req.params.brand;
+    await Product.findAll({
+        where: {
+            brand: brand
+        },
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock','company']
+            }
+        ]
+    }).then(data=>{
+        res.send({
+            status: true,
+            message: 'Load All Product By Brand '+brand,
+            data: data
+        })
+    }).catch(err=>{
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
+const getProductsByCategory= async (req,res) => {
+    const category = req.params.category;
+    await Product.findAll({
+        where: {
+            category: category
+        },
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock','company']
+            }
+        ]
+    }).then(data=>{
+        res.send({
+            status: true,
+            message: 'Load All Product By Category '+category,
+            data: data
+        })
+    }).catch(err=>{
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const deleteProduct = async (req, res) => {
     const id = req.params.id;
     await Product.destroy({
@@ -97,5 +151,7 @@ module.exports = {
     addProduct,
     getAllProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductsByCategory,
+    getProductsByBrand
 }

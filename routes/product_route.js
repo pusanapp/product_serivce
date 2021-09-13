@@ -6,6 +6,8 @@ const productCategoryController = require('../controller/master_product_category
 const productBrandController = require('../controller/master_product_brand_controller')
 
 router.get('/all', productController.getAllProduct)
+router.get('/all/category/:category', productController.getProductsByCategory)
+router.get('/all/brand/:brand', productController.getProductsByBrand)
 router.post('/add', productController.addProduct)
 router.put('/update/:id', productController.updateProduct)
 router.delete('/delete/:id', productController.deleteProduct)
