@@ -6,13 +6,13 @@ const VideoProduct = model.video_product;
 
 const addProduct = async (req, res) => {
     const data = req.body;
-    await Product.create(data).then(result=>{
+    await Product.create(data).then(result => {
         res.send({
             status: true,
             message: 'Product Added',
             data: result
         })
-    }).catch(err=>{
+    }).catch(err => {
         res.send({
             status: false,
             message: `Err ${err.message}`,
@@ -26,7 +26,7 @@ const getAllProduct = async (req, res) => {
             {
                 model: Barang,
                 as: 'hafara_product',
-                attributes: ['stock','company']
+                attributes: ['stock', 'company']
             },
             {
                 model: ImageProduct,
@@ -39,13 +39,13 @@ const getAllProduct = async (req, res) => {
             'discount_product',
             'combo_product'
         ]
-    }).then(data=>{
+    }).then(data => {
         res.send({
             status: true,
             message: 'Load All Product',
             data: data
         })
-    }).catch(err=>{
+    }).catch(err => {
         res.send({
             status: false,
             message: `Err ${err.message}`,
@@ -53,7 +53,7 @@ const getAllProduct = async (req, res) => {
     })
 }
 
-const updateProduct = async (req,res) => {
+const updateProduct = async (req, res) => {
     const data = req.body;
     const id = req.params.id;
     await Product.update(data, {
@@ -61,12 +61,12 @@ const updateProduct = async (req,res) => {
             id: id
         }
     }).then(rowUpdate => {
-        if(rowUpdate>0){
+        if (rowUpdate > 0) {
             res.send({
                 status: true,
                 message: 'Product Updated Success',
             })
-        }else {
+        } else {
             res.send({
                 status: true,
                 message: 'Product Updated Failed',
@@ -80,7 +80,7 @@ const updateProduct = async (req,res) => {
     });
 }
 
-const getProductsByBrand= async (req,res) => {
+const getProductsByBrand = async (req, res) => {
     const brand = req.params.brand;
     await Product.findAll({
         where: {
@@ -90,7 +90,7 @@ const getProductsByBrand= async (req,res) => {
             {
                 model: Barang,
                 as: 'hafara_product',
-                attributes: ['stock','company']
+                attributes: ['stock', 'company']
             },
             {
                 model: ImageProduct,
@@ -103,13 +103,13 @@ const getProductsByBrand= async (req,res) => {
             'discount_product',
             'combo_product'
         ]
-    }).then(data=>{
+    }).then(data => {
         res.send({
             status: true,
-            message: 'Load All Product By Brand '+brand,
+            message: 'Load All Product By Brand ' + brand,
             data: data
         })
-    }).catch(err=>{
+    }).catch(err => {
         res.send({
             status: false,
             message: `Err ${err.message}`,
@@ -117,7 +117,7 @@ const getProductsByBrand= async (req,res) => {
     })
 }
 
-const getProductsByCategory= async (req,res) => {
+const getProductsByCategory = async (req, res) => {
     const category = req.params.category;
     await Product.findAll({
         where: {
@@ -127,7 +127,7 @@ const getProductsByCategory= async (req,res) => {
             {
                 model: Barang,
                 as: 'hafara_product',
-                attributes: ['stock','company']
+                attributes: ['stock', 'company']
             },
             {
                 model: ImageProduct,
@@ -140,13 +140,13 @@ const getProductsByCategory= async (req,res) => {
             'discount_product',
             'combo_product'
         ]
-    }).then(data=>{
+    }).then(data => {
         res.send({
             status: true,
-            message: 'Load All Product By Category '+category,
+            message: 'Load All Product By Category ' + category,
             data: data
         })
-    }).catch(err=>{
+    }).catch(err => {
         res.send({
             status: false,
             message: `Err ${err.message}`,
@@ -179,11 +179,104 @@ const deleteProduct = async (req, res) => {
     })
 }
 
+const updateSeenProduct = async (req, res) => {
+    const productId = req.params.product_id;
+    const currentProduct = await Product.findOne({where: {id: productId}})
+    await Product.update(
+        {
+            seen: currentProduct.seen + 1
+        }, {
+            where: {
+                id: productId
+            }
+        }
+    ).then(rowUpdate=>{
+        if(rowUpdate>0){
+            res.send({
+                status: true,
+                message: `update seen product to ${currentProduct.seen+1}`
+            })
+        }
+        res.send({
+            status: false,
+            message: 'update failed',
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: err.message,
+        })
+    })
+
+}
+
+const updateSoldProduct = async (req, res) => {
+    const productId = req.params.product_id;
+    const currentProduct = await Product.findOne({where: {id: productId}})
+    await Product.update(
+        {
+            sold: currentProduct.sold + 1
+        }, {
+            where: {
+                id: productId
+            }
+        }
+    ).then(async (rowUpdate)=>{
+        if(rowUpdate>0){
+            res.send({
+                status: true,
+                message: `update sold product to ${currentProduct.sold+1}`
+            })
+        }
+        res.send({
+            status: false,
+            message: 'update failed',
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: err.message,
+        })
+    })
+}
+
+const updateStockBarang = async (req,res) =>{
+    const data = req.body;
+    const idBarang = req.params.id_barang;
+    const currentBarang = await Barang.findOne({where: {pid: idBarang}})
+    await Barang.update({
+        stock: currentBarang.stock - data.qty
+    },{
+        where: {
+            pid: idBarang
+        }
+    }).then(async (rowUpdate)=>{
+        if(rowUpdate>0){
+            res.send({
+                status: true,
+                message: `update stock barang to ${currentBarang.stock - data.qty}`
+            })
+        }
+        res.send({
+            status: false,
+            message: 'update failed',
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: err.message,
+        })
+    })
+}
+
 module.exports = {
     addProduct,
     getAllProduct,
     updateProduct,
     deleteProduct,
     getProductsByCategory,
-    getProductsByBrand
+    getProductsByBrand,
+    updateSoldProduct,
+    updateSeenProduct,
+    updateStockBarang
 }
