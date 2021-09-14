@@ -212,10 +212,11 @@ const updateSeenProduct = async (req, res) => {
 
 const updateSoldProduct = async (req, res) => {
     const productId = req.params.product_id;
+    const data = req.body;
     const currentProduct = await Product.findOne({where: {id: productId}})
     await Product.update(
         {
-            sold: currentProduct.sold + 1
+            sold: currentProduct.sold + data.qty
         }, {
             where: {
                 id: productId
