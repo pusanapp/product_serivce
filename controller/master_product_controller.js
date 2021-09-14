@@ -226,7 +226,7 @@ const updateSoldProduct = async (req, res) => {
         if(rowUpdate>0){
             res.send({
                 status: true,
-                message: `update sold product to ${currentProduct.sold+1}`
+                message: `update sold product to ${currentProduct.sold + data.qty}`
             })
         }
         res.send({
