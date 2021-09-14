@@ -1,6 +1,8 @@
 const model = require('../models/index')
 const Product = model.app_product;
 const Barang = model.e_barang;
+const ImageProduct = model.image_product;
+const VideoProduct = model.video_product;
 
 const addProduct = async (req, res) => {
     const data = req.body;
@@ -25,7 +27,17 @@ const getAllProduct = async (req, res) => {
                 model: Barang,
                 as: 'hafara_product',
                 attributes: ['stock','company']
-            }
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
         ]
     }).then(data=>{
         res.send({
@@ -79,7 +91,17 @@ const getProductsByBrand= async (req,res) => {
                 model: Barang,
                 as: 'hafara_product',
                 attributes: ['stock','company']
-            }
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
         ]
     }).then(data=>{
         res.send({
@@ -106,7 +128,17 @@ const getProductsByCategory= async (req,res) => {
                 model: Barang,
                 as: 'hafara_product',
                 attributes: ['stock','company']
-            }
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
         ]
     }).then(data=>{
         res.send({
