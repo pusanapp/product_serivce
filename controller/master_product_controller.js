@@ -154,6 +154,114 @@ const getProductsByCategory = async (req, res) => {
     })
 }
 
+const getPopularProduct = async (req, res) => {
+    await Product.findAll({
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company']
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
+        ],
+        order: [
+            ['seen', 'DESC']
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'Load All Popular Product',
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
+const getBestSellerProduct = async (req, res) => {
+    await Product.findAll({
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company']
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
+        ],
+        order: [
+            ['sold', 'DESC']
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'Load All Best Seller Product',
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
+const getNewProduct = async (req, res) => {
+    await Product.findAll({
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company']
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'discount_product',
+            'combo_product'
+        ],
+        order: [
+            ['createdAt', 'DESC']
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'Load All Best Seller Product',
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const deleteProduct = async (req, res) => {
     const id = req.params.id;
     await Product.destroy({
@@ -279,5 +387,8 @@ module.exports = {
     getProductsByBrand,
     updateSoldProduct,
     updateSeenProduct,
-    updateStockBarang
+    updateStockBarang,
+    getPopularProduct,
+    getBestSellerProduct,
+    getNewProduct
 }
