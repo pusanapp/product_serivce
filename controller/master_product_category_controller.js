@@ -84,9 +84,29 @@ const deleteProductCategory = async (req, res) => {
     })
 }
 
+const getAllProductCategoryByProductType = async (req, res) => {
+    await Category.findAll({
+        where: {
+            product_type_id : req.params.type_id
+        }
+    }).then(data=>{
+        res.send({
+            status: true,
+            data: data,
+            message: 'get all product category'
+        })
+    }).catch(err=>{
+        res.send({
+            message: err.message,
+            status: false
+        })
+    })
+}
+
 module.exports = {
     addProductCategory,
     getAllProductCategory,
     updateProductCategory,
-    deleteProductCategory
+    deleteProductCategory,
+    getAllProductCategoryByProductType
 }

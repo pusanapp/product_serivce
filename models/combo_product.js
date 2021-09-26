@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.BOOLEAN
   }, {
     sequelize,
+    paranoid: true,
     modelName: 'combo_product',
   });
   return combo_product;

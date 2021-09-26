@@ -25,11 +25,13 @@ router.delete('/type/delete/:id',productTypeController.deleteProductType )
 
 router.post('/category/add',productCategoryController.addProductCategory )
 router.get('/category/all',productCategoryController.getAllProductCategory )
+router.get('/category/all/:type_id',productCategoryController.getAllProductCategoryByProductType )
 router.put('/category/update/:id',productCategoryController.updateProductCategory )
 router.delete('/category/delete/:id',productCategoryController.deleteProductCategory )
 
 router.post('/brand/add',productBrandController.addProductBrand )
 router.get('/brand/all',productBrandController.getAllProductBrand )
+router.get('/brand/all/:category_id',productBrandController.getAllProductBrandByCategory )
 router.put('/brand/update/:id',productBrandController.updateProductBrand )
 router.delete('/brand/delete/:id',productBrandController.deleteProductBrand )
 

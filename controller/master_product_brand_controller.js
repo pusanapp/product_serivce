@@ -83,10 +83,28 @@ const deleteProductBrand = async (req, res) => {
         })
     })
 }
-
+const getAllProductBrandByCategory = async (req, res) => {
+    await Brand.findAll({
+        where: {
+            product_category_id: req.params.category_id
+        }
+    }).then(data=>{
+        res.send({
+            status: true,
+            data: data,
+            message: 'get all product Brand'
+        })
+    }).catch(err=>{
+        res.send({
+            message: err.message,
+            status: false
+        })
+    })
+}
 module.exports = {
     addProductBrand,
     getAllProductBrand,
     updateProductBrand,
-    deleteProductBrand
+    deleteProductBrand,
+    getAllProductBrandByCategory
 }
