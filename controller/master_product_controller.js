@@ -20,6 +20,24 @@ const addProduct = async (req, res) => {
     })
 }
 
+const getHafaraProduct = async (req, res) => {
+    await Barang.findAll({
+        where: {
+            company: 'Hafara'
+        }
+    }).then(data=>{
+        res.send({
+            status: true,
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const getAllProduct = async (req, res) => {
     await Product.findAll({
         include: [
@@ -411,5 +429,6 @@ module.exports = {
     getPopularProduct,
     getBestSellerProduct,
     getNewProduct,
-    getStockHafara
+    getStockHafara,
+    getHafaraProduct
 }
