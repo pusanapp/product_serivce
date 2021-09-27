@@ -378,6 +378,26 @@ const updateStockBarang = async (req,res) =>{
     })
 }
 
+const getStockHafara = async (req,res) => {
+    const id = req.params.id;
+    await Barang.findOne({
+        where: {
+            pid: id
+        },
+        attributes:['stock']
+    }).then(data=>{
+        res.send({
+            status: true,
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: err.message,
+        })
+    })
+}
+
 module.exports = {
     addProduct,
     getAllProduct,
@@ -390,5 +410,6 @@ module.exports = {
     updateStockBarang,
     getPopularProduct,
     getBestSellerProduct,
-    getNewProduct
+    getNewProduct,
+    getStockHafara
 }

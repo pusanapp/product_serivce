@@ -17,6 +17,7 @@ router.delete('/delete/:id', productController.deleteProduct)
 router.put('/update/sold/:product_id', productController.updateSoldProduct)
 router.put('/update/seen/:product_id', productController.updateSeenProduct)
 router.put('/update/stock/:id_barang', productController.updateStockBarang)
+router.get('/stock/hafara/:id', productController.getStockHafara)
 
 router.post('/type/add',productTypeController.addProductType )
 router.get('/type/all',productTypeController.getAllProductType )
