@@ -6,7 +6,7 @@ const productCategoryController = require('../controller/master_product_category
 const productBrandController = require('../controller/master_product_brand_controller')
 
 router.get('/all', productController.getAllProduct)
-router.get('/all/hafara', productController.getHafaraProduct)
+router.get('/all/hafara',productController.checkCacheHafara ,productController.getHafaraProduct)
 router.get('/all/popular', productController.getPopularProduct)
 router.get('/all/best-seller', productController.getBestSellerProduct)
 router.get('/all/new', productController.getNewProduct)

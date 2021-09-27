@@ -4,6 +4,9 @@ const Barang = model.e_barang;
 const ImageProduct = model.image_product;
 const VideoProduct = model.video_product;
 
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
+
 const addProduct = async (req, res) => {
     const data = req.body;
     await Product.create(data).then(result => {
@@ -20,12 +23,26 @@ const addProduct = async (req, res) => {
     })
 }
 
+const checkCacheHafara = async (req, res, next)=>{
+    const value = myCache.get( "hafara" );
+    if ( value === undefined ){
+        next()
+    } else {
+        res.send({
+            status: true,
+            data: value
+        })
+    }
+
+}
+
 const getHafaraProduct = async (req, res) => {
     await Barang.findAll({
         where: {
             company: 'Hafara'
         }
     }).then(data=>{
+        myCache.set( "hafara", data, 1200 );
         res.send({
             status: true,
             data: data
@@ -418,6 +435,7 @@ const getStockHafara = async (req,res) => {
 
 module.exports = {
     addProduct,
+    checkCacheHafara,
     getAllProduct,
     updateProduct,
     deleteProduct,
