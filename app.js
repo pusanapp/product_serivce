@@ -7,7 +7,8 @@ const cors = require("cors");
 
 const indexRouter = require('./routes/index');
 const productRouter = require('./routes/product_route');
-
+const discountRouter = require('./routes/discount_route')
+const bannerRouter = require('./routes/banner_route')
 const app = express();
 
 app.use(cors());
@@ -24,4 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/v1/pusan/product', productRouter)
+app.use('/api/v1/master', discountRouter)
+app.use('/api/v1/banner', bannerRouter)
 module.exports = app;

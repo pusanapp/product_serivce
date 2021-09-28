@@ -8,9 +8,28 @@ const NodeCache = require("node-cache");
 const myCache = new NodeCache();
 
 const addProduct = async (req, res) => {
-    const data = req.body;
-    await Product.create(data).then(result => {
-        res.send({
+    const body = req.body;
+    const data = body.data;
+    const images = body.images;
+    const videos = body.videos;
+    await Product.create(data).then(async (result) => {
+        images.map(async (image)=>{
+            const savedImage = {
+                product_id: result.id,
+                image_url: image,
+                status: true
+            }
+            await ImageProduct.create(savedImage)
+        })
+        videos.map(async (video)=>{
+            const savedImage = {
+                product_id: result.id,
+                video_url: video.url,
+                status: true
+            }
+            await VideoProduct.create(savedImage)
+        })
+        await res.send({
             status: true,
             message: 'Product Added',
             data: result
