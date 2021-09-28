@@ -39,7 +39,10 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      detail: {
+        type: Sequelize.TEXT
       },
       specification: {
         type: Sequelize.TEXT
