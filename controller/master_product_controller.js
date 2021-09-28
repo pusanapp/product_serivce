@@ -3,8 +3,8 @@ const Product = model.app_product;
 const Barang = model.e_barang;
 const ImageProduct = model.image_product;
 const VideoProduct = model.video_product;
-
-const NodeCache = require( "node-cache" );
+const Discount = model.app_product_discount;
+const NodeCache = require("node-cache");
 const myCache = new NodeCache();
 
 const addProduct = async (req, res) => {
@@ -23,9 +23,9 @@ const addProduct = async (req, res) => {
     })
 }
 
-const checkCacheHafara = async (req, res, next)=>{
-    const value = myCache.get( "hafara" );
-    if ( value === undefined ){
+const checkCacheHafara = async (req, res, next) => {
+    const value = myCache.get("hafara");
+    if (value === undefined) {
         next()
     } else {
         res.send({
@@ -41,8 +41,8 @@ const getHafaraProduct = async (req, res) => {
         where: {
             company: 'Hafara'
         }
-    }).then(data=>{
-        myCache.set( "hafara", data, 1200 );
+    }).then(data => {
+        myCache.set("hafara", data, 1200);
         res.send({
             status: true,
             data: data
@@ -71,7 +71,7 @@ const getAllProduct = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ]
     }).then(data => {
@@ -81,6 +81,7 @@ const getAllProduct = async (req, res) => {
             data: data
         })
     }).catch(err => {
+        console.log(err)
         res.send({
             status: false,
             message: `Err ${err.message}`,
@@ -135,7 +136,7 @@ const getProductsByBrand = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ]
     }).then(data => {
@@ -172,7 +173,7 @@ const getProductsByCategory = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ]
     }).then(data => {
@@ -205,7 +206,7 @@ const getPopularProduct = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ],
         order: [
@@ -241,7 +242,7 @@ const getBestSellerProduct = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ],
         order: [
@@ -277,7 +278,7 @@ const getNewProduct = async (req, res) => {
                 model: VideoProduct,
                 as: 'video_product'
             },
-            'discount_product',
+            'app_product_discount',
             'combo_product'
         ],
         order: [
@@ -333,11 +334,11 @@ const updateSeenProduct = async (req, res) => {
                 id: productId
             }
         }
-    ).then(rowUpdate=>{
-        if(rowUpdate>0){
+    ).then(rowUpdate => {
+        if (rowUpdate > 0) {
             res.send({
                 status: true,
-                message: `update seen product to ${currentProduct.seen+1}`
+                message: `update seen product to ${currentProduct.seen + 1}`
             })
         }
         res.send({
@@ -365,8 +366,8 @@ const updateSoldProduct = async (req, res) => {
                 id: productId
             }
         }
-    ).then(async (rowUpdate)=>{
-        if(rowUpdate>0){
+    ).then(async (rowUpdate) => {
+        if (rowUpdate > 0) {
             res.send({
                 status: true,
                 message: `update sold product to ${currentProduct.sold + data.qty}`
@@ -384,18 +385,18 @@ const updateSoldProduct = async (req, res) => {
     })
 }
 
-const updateStockBarang = async (req,res) =>{
+const updateStockBarang = async (req, res) => {
     const data = req.body;
     const idBarang = req.params.id_barang;
     const currentBarang = await Barang.findOne({where: {pid: idBarang}})
     await Barang.update({
         stock: currentBarang.stock - data.qty
-    },{
+    }, {
         where: {
             pid: idBarang
         }
-    }).then(async (rowUpdate)=>{
-        if(rowUpdate>0){
+    }).then(async (rowUpdate) => {
+        if (rowUpdate > 0) {
             res.send({
                 status: true,
                 message: `update stock barang to ${currentBarang.stock - data.qty}`
@@ -413,14 +414,14 @@ const updateStockBarang = async (req,res) =>{
     })
 }
 
-const getStockHafara = async (req,res) => {
+const getStockHafara = async (req, res) => {
     const id = req.params.id;
     await Barang.findOne({
         where: {
             pid: id
         },
-        attributes:['stock']
-    }).then(data=>{
+        attributes: ['stock']
+    }).then(data => {
         res.send({
             status: true,
             data: data

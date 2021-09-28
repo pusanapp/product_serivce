@@ -1,20 +1,20 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('discount_products', {
+    await queryInterface.createTable('app_product_discounts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      combo_name: {
+      name: {
         type: Sequelize.STRING
       },
       description: {
         type: Sequelize.STRING
       },
-      combo_price: {
+      discount_amount: {
         type: Sequelize.INTEGER
       },
       status: {
@@ -31,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('discount_products');
+    await queryInterface.dropTable('app_product_discounts');
   }
 };

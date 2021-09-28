@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'combo_id',
                 as: 'combo_product'
             })
-            this.belongsTo(models.discount_product, {
-                foreignKey: 'discount_id',
-                as: 'discount_product'
+            this.belongsTo(models.app_product_discount, {
+                foreignKey: 'app_discount_id',
+                as: 'app_product_discount'
             })
         }
     };
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         seen: DataTypes.INTEGER,
         combo_id: DataTypes.INTEGER,
         combo_name: DataTypes.STRING,
-        discount_id: DataTypes.INTEGER,
+        app_discount_id: DataTypes.INTEGER,
         discount_name: DataTypes.STRING
     }, {
         sequelize,

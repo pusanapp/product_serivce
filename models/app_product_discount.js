@@ -3,28 +3,27 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class discount_product extends Model {
+  class app_product_discount extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.app_product, {
-        foreignKey: 'discount_id',
-        as: 'app_products'
+      this.hasMany(models.app_product,{
+        foreignKey: 'app_discount_id',
+        as: 'app_product'
       })
     }
   };
-  discount_product.init({
-    combo_name: DataTypes.STRING,
+  app_product_discount.init({
+    name: DataTypes.STRING,
     description: DataTypes.STRING,
-    combo_price: DataTypes.INTEGER,
+    discount_amount: DataTypes.INTEGER,
     status: DataTypes.BOOLEAN
   }, {
     sequelize,
-    paranoid: true,
-    modelName: 'discount_product',
+    modelName: 'app_product_discount',
   });
-  return discount_product;
+  return app_product_discount;
 };
