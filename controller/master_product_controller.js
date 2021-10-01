@@ -209,6 +209,43 @@ const getProductsByCategory = async (req, res) => {
     })
 }
 
+const getProductsByType= async (req, res) => {
+    const type = req.params.type;
+    await Product.findAll({
+        where: {
+            type: type
+        },
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company']
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'app_product_discount',
+            'combo_product'
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'Load All Product By Type ' + type,
+            data: data
+        })
+    }).catch(err => {
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const getPopularProduct = async (req, res) => {
     await Product.findAll({
         include: [
@@ -468,5 +505,6 @@ module.exports = {
     getBestSellerProduct,
     getNewProduct,
     getStockHafara,
-    getHafaraProduct
+    getHafaraProduct,
+    getProductsByType
 }
