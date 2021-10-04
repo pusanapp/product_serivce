@@ -58,7 +58,10 @@ module.exports = (sequelize, DataTypes) => {
         combo_id: DataTypes.INTEGER,
         combo_name: DataTypes.STRING,
         app_discount_id: DataTypes.INTEGER,
-        discount_name: DataTypes.STRING
+        discount_name: DataTypes.STRING,
+        category_id: DataTypes.INTEGER,
+        type_id: DataTypes.INTEGER,
+        brand_id: DataTypes.INTEGER
     }, {
         sequelize,
         paranoid: true,
