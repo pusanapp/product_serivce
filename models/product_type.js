@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   product_type.init({
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    icon_url: DataTypes.STRING
   }, {
     sequelize,
     paranoid: true,
