@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'combo_id',
         as: 'app_products'
       })
+      this.hasMany(models.app_product, {
+        foreignKey: 'include_combo_id',
+        as: 'include_products'
+      })
     }
   };
   combo_product.init({

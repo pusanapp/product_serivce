@@ -86,7 +86,7 @@ const createCombo = async (req, res) => {
     await Combo.create(data).then(async (result) => {
         const updateProduct = {
             combo_id: result.id,
-            combo_name: result.name,
+            combo_name: result.combo_name,
         }
         products.map(async (product) => {
             await Product.update(updateProduct, {
@@ -119,6 +119,7 @@ const createDiscount = async (req, res) => {
             discount_name: result.name,
         }
         products.map(async (product) => {
+            updateProduct.discount_price = product.discount_price
             await Product.update(updateProduct, {
                 where: {
                     id: product.id
@@ -167,6 +168,7 @@ const addNewProductDiscount = async (req, res) => {
         discount_name: discount.name,
     }
     products.map(async (product) => {
+        updateProduct.discount_price = product.discount_price
         await Product.update(updateProduct, {
             where: {
                 id: product.id
@@ -203,6 +205,7 @@ const removeProductDiscount = async (req, res) => {
     const updateProduct = {
         app_discount_id: null,
         discount_name: null,
+        discount_price: null,
     }
     products.map(async (product) => {
         await Product.update(updateProduct, {
@@ -240,7 +243,7 @@ const getAllCombo = async (req, res) => {
 
 const deleteCombo = async (req, res) => {
     const id = req.params.id;
-    await Product.destroy({
+    await Combo.destroy({
         where: {
             id: id
         }
@@ -290,6 +293,7 @@ const deleteDiscount = async (req, res) => {
             await Product.update({
                 app_discount_id: null,
                 discount_name: null,
+                discount_price: null,
             }, {
                 where: {
                     app_discount_id: id

@@ -4,6 +4,7 @@ const Barang = model.e_barang;
 const ImageProduct = model.image_product;
 const VideoProduct = model.video_product;
 const Discount = model.app_product_discount;
+const Combo = model.combo_product;
 const NodeCache = require("node-cache");
 const myCache = new NodeCache();
 
@@ -91,7 +92,13 @@ const getAllProduct = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ]
     }).then(data => {
         res.send({
@@ -156,7 +163,13 @@ const getProductsByBrand = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ]
     }).then(data => {
         res.send({
@@ -193,7 +206,13 @@ const getProductsByCategory = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ]
     }).then(data => {
         res.send({
@@ -230,7 +249,13 @@ const getProductsByType= async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ]
     }).then(data => {
         res.send({
@@ -263,7 +288,13 @@ const getPopularProduct = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ],
         order: [
             ['seen', 'DESC']
@@ -299,7 +330,13 @@ const getBestSellerProduct = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ],
         order: [
             ['sold', 'DESC']
@@ -335,7 +372,13 @@ const getNewProduct = async (req, res) => {
                 as: 'video_product'
             },
             'app_product_discount',
-            'combo_product'
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
         ],
         order: [
             ['createdAt', 'DESC']

@@ -82,7 +82,7 @@ const updateBanner= async (req, res) => {
     })
 }
 
-const deleteDiscount = async (req, res) => {
+const deleteBanner = async (req, res) => {
     const id = req.params.id;
     await Banner.destroy({
         where: {
@@ -113,6 +113,6 @@ module.exports = {
     getAllBanner,
     createBanner,
     updateBanner,
-    deleteDiscount,
+    deleteBanner,
     getAllActiveBanner
 }

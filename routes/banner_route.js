@@ -7,6 +7,6 @@ router.get('/all', bannerController.getAllBanner)
 router.get('/all/active', bannerController.getAllActiveBanner)
 router.post('/create', bannerController.createBanner)
 router.put('/update/:id', bannerController.updateBanner)
-router.delete('/delete/:id', bannerController.deleteDiscount)
+router.delete('/delete/:id', bannerController.deleteBanner)
 
 module.exports = router;
