@@ -533,6 +533,44 @@ const getStockHafara = async (req, res) => {
     })
 }
 
+const getAvailableProduct = async (req, res) => {
+    const data = req.body.data;
+    const availProduct = []
+    const unavilableProduct = []
+    let count = 0
+    data.map(async (product) => {
+        const {dataValues} = await Barang.findOne({
+            attributes: ['stock'],
+            where: {
+                pid: product.barang_id
+            }
+        })
+        console.log(dataValues.stock)
+        if(product.qty<=dataValues.stock) {
+            availProduct.push(product)
+        }else if(product.qty>dataValues.stock) {
+            unavilableProduct.push(product)
+        }
+        count++
+        if(count === data.length) {
+            res.send({
+                available: {
+                    message: 'available product',
+                    data: availProduct
+                },
+                unavailable: {
+                    message: 'unavailable product',
+                    data: unavilableProduct
+                }
+            })
+        }
+    })
+    // await res.send({
+    //     available: availProduct,
+    //     unavailable: unavilableProduct
+    // })
+}
+
 module.exports = {
     addProduct,
     checkCacheHafara,
@@ -549,5 +587,6 @@ module.exports = {
     getNewProduct,
     getStockHafara,
     getHafaraProduct,
-    getProductsByType
+    getProductsByType,
+    getAvailableProduct
 }
