@@ -547,8 +547,10 @@ const getAvailableProduct = async (req, res) => {
         })
         console.log(dataValues.stock)
         if(product.qty<=dataValues.stock) {
+            product.current_stock = dataValues.stock
             availProduct.push(product)
         }else if(product.qty>dataValues.stock) {
+            product.current_stock = dataValues.stock
             unavilableProduct.push(product)
         }
         count++
