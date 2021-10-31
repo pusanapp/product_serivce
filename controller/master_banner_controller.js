@@ -1,8 +1,11 @@
 const model = require('../models/index')
 const Banner = model.app_banner;
+const Discount = model.app_product_discount;
 
 const getAllBanner = async (req,res)=>{
-    await Banner.findAll({}).then(data=>{
+    await Banner.findAll({
+        include: ['app_product_discount']
+    }).then(data=>{
         res.send({
             status: true,
             message: 'get all Banner',

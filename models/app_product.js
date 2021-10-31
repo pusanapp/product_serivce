@@ -66,7 +66,8 @@ module.exports = (sequelize, DataTypes) => {
         category_id: DataTypes.INTEGER,
         type_id: DataTypes.INTEGER,
         brand_id: DataTypes.INTEGER,
-        include_combo_id: DataTypes.INTEGER
+        include_combo_id: DataTypes.INTEGER,
+        combo_price: DataTypes.INTEGER
     }, {
         sequelize,
         paranoid: true,

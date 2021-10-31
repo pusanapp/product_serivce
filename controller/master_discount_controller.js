@@ -3,6 +3,26 @@ const Combo = model.combo_product;
 const Discount = model.app_product_discount;
 const Product = model.app_product;
 
+const getAllCombo = async (req, res) => {
+    await Combo.findAll({
+        include: [
+            'app_products'
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'get all Combo',
+            data: data
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const getAllDiscount = async (req, res) => {
     await Discount.findAll({
         include: [
@@ -89,13 +109,14 @@ const createCombo = async (req, res) => {
             combo_name: result.combo_name,
         }
         products.map(async (product) => {
+            updateProduct.combo_price = product.combo_price
             await Product.update(updateProduct, {
                 where: {
                     id: product.id
                 }
             })
         })
-        await res.send({
+        res.send({
             status: true,
             message: 'Combo Added',
             data: result
@@ -126,7 +147,7 @@ const createDiscount = async (req, res) => {
                 }
             })
         })
-        await res.send({
+        res.send({
             status: true,
             message: 'Discount Added',
             data: result
@@ -148,6 +169,7 @@ const addNewProductCombo = async (req, res) => {
         combo_name: combo.name,
     }
     products.map(async (product) => {
+        updateProduct.combo_price = product.combo_price
         await Product.update(updateProduct, {
             where: {
                 id: product.id
@@ -186,6 +208,7 @@ const removeProductCombo = async (req, res) => {
     const updateProduct = {
         combo_id: null,
         combo_name: null,
+        combo_price: null
     }
     products.map(async (product) => {
         await Product.update(updateProduct, {
@@ -220,27 +243,6 @@ const removeProductDiscount = async (req, res) => {
     })
 }
 
-
-const getAllCombo = async (req, res) => {
-    await Combo.findAll({
-        include: [
-            'app_products'
-        ]
-    }).then(data => {
-        res.send({
-            status: true,
-            message: 'get all Discount',
-            data: data
-        })
-    }).catch(err => {
-        console.log(err)
-        res.send({
-            status: false,
-            message: `Err ${err.message}`,
-        })
-    })
-}
-
 const deleteCombo = async (req, res) => {
     const id = req.params.id;
     await Combo.destroy({
@@ -258,6 +260,7 @@ const deleteCombo = async (req, res) => {
             await Product.update({
                 combo_id: null,
                 combo_name: null,
+                combo_price: null
             }, {
                 where: {
                     combo_id: id

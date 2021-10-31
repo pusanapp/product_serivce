@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'app_discount_id',
         as: 'app_product'
       })
+      this.hasOne(models.app_banner, {
+        foreignKey: 'discount_id',
+        as: 'app_banner'
+      })
     }
   };
   app_product_discount.init({
