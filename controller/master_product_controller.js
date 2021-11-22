@@ -6,6 +6,8 @@ const VideoProduct = model.video_product;
 const Discount = model.app_product_discount;
 const Combo = model.combo_product;
 const NodeCache = require("node-cache");
+const {paginate} = require("../utils/paginate");
+const {Op, Sequelize} = require("sequelize");
 const myCache = new NodeCache();
 
 const addProduct = async (req, res) => {
@@ -115,6 +117,100 @@ const getAllProduct = async (req, res) => {
     })
 }
 
+const getAllProductNew = async (req, res)=>{
+    try {
+        // get the query params
+        const {q, page, limit, orderBy, orderDirection} = req.query;
+
+        let search = {};
+        let order = [];
+        let include = [];
+
+        include = [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company'],
+                required: true
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'app_product_discount',
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
+        ]
+        // add the search term to the search object
+
+        search = {
+            [Op.or]: [
+                {
+                    "$hafara_product.stock$": {
+                        [Op.like]: `%${q}%`,
+                    },
+                },
+                {
+                    name: {
+                        [Op.like]: `%${q}%`,
+                    },
+                },
+                {
+                    code: {
+                        [Op.like]: `%${q}%`,
+                    },
+                },
+                {
+                    brand: {
+                        [Op.like]: `%${q}%`,
+                    },
+                },
+
+                {
+                    category: {
+                        [Op.like]: `%${q}%`,
+                    },
+                },
+            ],
+        };
+
+
+        // add the order parameters to the order
+        if (orderBy && orderDirection) {
+            order.push([Sequelize.col(orderBy), orderDirection]);
+        }
+        console.log('search, ', search)
+        // paginate method that takes in the model, page, limit, search object, order and transform
+        const result = await paginate(
+            Product,
+            page,
+            limit,
+            search,
+            order,
+            include
+        );
+
+        return res.status(200).send({
+            status: true,
+            message: "get all data",
+            data: result,
+        });
+    } catch (err) {
+        res.send({
+            status: false,
+            message: "error, " + err.message,
+        });
+    }
+}
 const updateProduct = async (req, res) => {
     const data = req.body;
     const id = req.params.id;
@@ -590,5 +686,6 @@ module.exports = {
     getStockHafara,
     getHafaraProduct,
     getProductsByType,
-    getAvailableProduct
+    getAvailableProduct,
+    getAllProductNew
 }
