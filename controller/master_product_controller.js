@@ -668,7 +668,50 @@ const getAvailableProduct = async (req, res) => {
     //     unavailable: unavilableProduct
     // })
 }
+const findProductById = async (req, res) => {
+    const id = req.params.id;
+    await Product.findAll({
+        where: {
+            id: id
+        },
+        include: [
+            {
+                model: Barang,
+                as: 'hafara_product',
+                attributes: ['stock', 'company']
+            },
+            {
+                model: ImageProduct,
+                as: 'image_product'
+            },
+            {
+                model: VideoProduct,
+                as: 'video_product'
+            },
+            'app_product_discount',
+            {
+                model: Combo,
+                as: 'include_combo',
+                include: [
+                    'app_products'
+                ]
+            }
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'find product',
+            data: data
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
 
+}
 module.exports = {
     addProduct,
     checkCacheHafara,
@@ -687,5 +730,6 @@ module.exports = {
     getHafaraProduct,
     getProductsByType,
     getAvailableProduct,
-    getAllProductNew
+    getAllProductNew,
+    findProductById
 }
