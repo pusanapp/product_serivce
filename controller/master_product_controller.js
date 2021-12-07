@@ -212,14 +212,48 @@ const getAllProductNew = async (req, res)=>{
     }
 }
 const updateProduct = async (req, res) => {
-    const data = req.body;
+    const body = req.body;
+    const data = body.data;
     const id = req.params.id;
+    const images = body.images;
+    const videos = body.videos;
     await Product.update(data, {
         where: {
             id: id
         }
-    }).then(rowUpdate => {
+    }).then(async (rowUpdate) => {
         if (rowUpdate > 0) {
+            if(images){
+                ImageProduct.destroy({
+                    where: {
+                        product_id: id
+                    }
+                })
+                images.map(async (image)=>{
+                    const savedImage = {
+                        product_id: result.id,
+                        image_url: image,
+                        status: true
+                    }
+                    await ImageProduct.create(savedImage)
+                })
+            }
+            if(videos){
+                await VideoProduct.destroy({
+                    where: {
+                        product_id: id
+                    }
+                })
+                videos.map(async (video)=>{
+                    const savedImage = {
+                        product_id: result.id,
+                        video_url: video.url,
+                        status: true
+                    }
+                    await VideoProduct.create(savedImage)
+                })
+            }
+
             res.send({
                 status: true,
                 message: 'Product Updated Success',

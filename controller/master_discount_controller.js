@@ -23,6 +23,29 @@ const getAllCombo = async (req, res) => {
     })
 }
 
+const getComboById = async (req, res) => {
+    await Combo.findOne({
+        where: {
+            id: req.params.id
+        },
+        include: [
+            'app_products'
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'get Combo',
+            data: data
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const getAllDiscount = async (req, res) => {
     await Discount.findAll({
         include: [
@@ -43,15 +66,67 @@ const getAllDiscount = async (req, res) => {
     })
 }
 
+const getDiscountById = async (req, res) => {
+    await Discount.findOne({
+        where: {
+            id: req.params.id
+        },
+        include: [
+            'app_product'
+        ]
+    }).then(data => {
+        res.send({
+            status: true,
+            message: 'get Discount',
+            data: data
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: false,
+            message: `Err ${err.message}`,
+        })
+    })
+}
+
 const updateCombo = async (req, res) => {
     const id = req.params.id;
-    const data = req.body;
+    const {data, products} = req.body;
     await Combo.update(data, {
         where: {
             id: id
         }
-    }).then(rowUpdate => {
+    }).then(async (rowUpdate) => {
         if (rowUpdate > 0) {
+            const comboData = await Combo.findOne({
+                where: {
+                    id: id
+                }
+            })
+            const resetProduct = {
+                combo_id: null,
+                combo_name: null,
+                combo_price: null
+            }
+            if(products){
+                await Product.update(resetProduct, {
+                    where: {
+                        combo_id: id
+                    }
+                })
+                const updateProduct = {
+                    combo_id: comboData.id,
+                    combo_name: comboData.combo_name,
+                }
+                products.map(async (product) => {
+                    updateProduct.combo_price = product.combo_price
+                    await Product.update(updateProduct, {
+                        where: {
+                            id: product.id
+                        }
+                    })
+                })
+            }
             res.send({
                 status: true,
                 message: 'update success'
@@ -73,13 +148,43 @@ const updateCombo = async (req, res) => {
 
 const updateDiscount = async (req, res) => {
     const id = req.params.id;
-    const data = req.body;
+    const {data, products} = req.body;
     await Discount.update(data, {
         where: {
             id: id
         }
-    }).then(rowUpdate => {
+    }).then(async (rowUpdate) => {
         if (rowUpdate > 0) {
+            const dataDiscount = await Discount.findOne({
+                where: {
+                    id: id
+                }
+            })
+            const resetProduct = {
+                app_discount_id: null,
+                discount_name: null,
+                discount_price: null
+            }
+            if(products) {
+                await Product.update(resetProduct,{
+                    where: {
+                        app_discount_id: id
+                    }
+                })
+                const updateProduct = {
+                    app_discount_id: dataDiscount.id,
+                    discount_name: dataDiscount.name,
+                }
+                products.map(async (product) => {
+                    updateProduct.discount_price = product.discount_price
+                    await Product.update(updateProduct, {
+                        where: {
+                            id: product.id
+                        }
+                    })
+                })
+
+            }
             res.send({
                 status: true,
                 message: 'update success'
@@ -100,9 +205,7 @@ const updateDiscount = async (req, res) => {
 }
 
 const createCombo = async (req, res) => {
-    const body = req.body;
-    const data = body.data;
-    const products = body.products;
+    const {data, products} = req.body;
     await Combo.create(data).then(async (result) => {
         const updateProduct = {
             combo_id: result.id,
@@ -131,9 +234,7 @@ const createCombo = async (req, res) => {
 }
 
 const createDiscount = async (req, res) => {
-    const body = req.body;
-    const data = body.data;
-    const products = body.products;
+    const {data, products} = req.body;
     await Discount.create(data).then(async (result) => {
         const updateProduct = {
             app_discount_id: result.id,
@@ -327,5 +428,7 @@ module.exports = {
     removeProductDiscount,
     removeProductCombo,
     deleteCombo,
-    deleteDiscount
+    deleteDiscount,
+    getComboById,
+    getDiscountById
 }
