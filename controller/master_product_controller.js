@@ -704,7 +704,7 @@ const getAvailableProduct = async (req, res) => {
 }
 const findProductById = async (req, res) => {
     const id = req.params.id;
-    await Product.findAll({
+    await Product.findOne({
         where: {
             id: id
         },
